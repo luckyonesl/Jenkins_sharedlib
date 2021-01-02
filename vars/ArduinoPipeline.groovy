@@ -24,9 +24,6 @@
 	   AgentLabel = "${config.AgentLables}"
 	}
    pipeline {
-	   agent {
-	      label AgentLabel
-	   }
 	   options {
 	      buildDiscarder(logRotator(numToKeepStr: '3'))
 	         timestamps()
@@ -42,6 +39,7 @@
 	         MYENV = 'undef'
 	      }
          stages {
+            agent { any }
 	         stage('test')
 	         {
 	            steps {
