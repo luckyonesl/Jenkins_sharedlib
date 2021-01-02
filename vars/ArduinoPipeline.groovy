@@ -25,7 +25,7 @@
 	}
    pipeline {
 	   agent {
-	      label agentLabel
+	      label AgentLabel
 	   }
 	   options {
 	      buildDiscarder(logRotator(numToKeepStr: '3'))
