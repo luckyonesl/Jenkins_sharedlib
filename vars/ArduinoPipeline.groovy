@@ -31,7 +31,7 @@
 	      buildDiscarder(logRotator(numToKeepStr: '3'))
 	         timestamps()
 	         disableConcurrentBuilds()
-	         timeout(time: globalTimeout, unit: 'MINUTES')
+	         timeout(time: GlobalTimeout, unit: 'MINUTES')
 	   }
 	   triggers {
 	      pollSCM('H/5 * * * *')
