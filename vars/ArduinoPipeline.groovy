@@ -16,7 +16,7 @@
 	body.delegate = config
 	body()
    ProjectName = config.ProjectName
-   if ( null == projectName || "" == projectName ) {
+   if ( null == ProjectName || "" == ProjectName ) {
 	   error "Project needs at least a projectName property with some meaningful value"
 	}
 	if ( null != config.AgentLables ) {
@@ -52,9 +52,9 @@
                agent { label 'arduinocli' }
 	            steps {
                   echo 'Building..'
-                    sh label: 'arduino link board', returnStatus: true, script: 'ln -s ~/Arduino'
-                    sh label: 'arduino link libs', returnStatus: true, script: 'ln -s ~/.arduino15'
-                    sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn "esp8266:esp8266:generall" az-envy'
+                  sh label: 'arduino link board', returnStatus: true, script: 'ln -s ~/Arduino'
+                  sh label: 'arduino link libs', returnStatus: true, script: 'ln -s ~/.arduino15'
+                  sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn "esp8266:esp8266:generall" az-envy'
 	            }
 	         }
             stage('Flash') {
