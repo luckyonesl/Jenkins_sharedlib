@@ -24,7 +24,7 @@ if ( null != config.AgentLables ) {
    AgentLabel = "${config.AgentLables}"
 }
 pipeline {
-   agent any
+   agent none
    options {
       buildDiscarder(logRotator(numToKeepStr: '3'))
 	   timestamps()
