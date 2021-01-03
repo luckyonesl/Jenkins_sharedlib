@@ -42,7 +42,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
 	      MYENV = 'undef'
 	   }
       stages {
-         agent { any }
+         //agent { any }
 	      stage('test') {
 	         steps {
                echo 'Testing..'
