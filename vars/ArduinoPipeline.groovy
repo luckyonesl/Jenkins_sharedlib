@@ -58,7 +58,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
                echo 'Building..'
                sh label: 'arduino link board', returnStatus: true, script: 'ln -s ~/Arduino'
                sh label: 'arduino link libs', returnStatus: true, script: 'ln -s ~/.arduino15'
-               sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn "${fqbn}" ${ProjectName}'
+               sh label: 'arduino', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn \"${fqbn}\" ${ProjectName}"
 	         }
 	      }
          stage('Flash') {
