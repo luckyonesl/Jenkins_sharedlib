@@ -20,6 +20,10 @@ for (int i =0; i < pluginDependencies.size(); i++) {
    if ( null == ProjectName || "" == ProjectName ) {
       error "Project needs at least a projectName property with some meaningful value"
    }
+   fqbn = config.fqbn
+   if ( null == fqbn || "" == fqbn ) {
+      error "Project needs at least a fqbn property with some meaningful value like esp8266:esp8266:d1_mini_pro"
+   }
    if ( null != config.AgentLables ) {
       echo "Using supplied agentLables '${config.AgentLables}'"
       AgentLabel = "${config.AgentLables}"
@@ -54,7 +58,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
                echo 'Building..'
                sh label: 'arduino link board', returnStatus: true, script: 'ln -s ~/Arduino'
                sh label: 'arduino link libs', returnStatus: true, script: 'ln -s ~/.arduino15'
-               sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn "esp8266:esp8266:generall" az-envy'
+               sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn "${fqbn}" ${ProjectName}'
 	         }
 	      }
          stage('Flash') {
