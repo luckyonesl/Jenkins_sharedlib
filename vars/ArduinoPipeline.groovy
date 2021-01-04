@@ -40,6 +40,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
    pipeline {
       agent none
       options {
+         preserveStashes(buildCount: 3)
          buildDiscarder(logRotator(numToKeepStr: '3'))
 	      timestamps()
 	      disableConcurrentBuilds()
@@ -76,7 +77,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
                echo 'Flash....'
                unstash 'arduino'
                sh label: 'arduino core install', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli core install ${PackerArchVersion}"
-               sh label: 'arduino upload', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli -v upload -i target/${ProjectName}.ino.bin --fqbn \"${fqbn}\" -p ${FLASHPORT}"
+               sh label: 'arduino upload', returnStatus: false, script: "/usr/local/arduino-cli/arduino-cli -v upload -i target/${ProjectName}.ino.bin --fqbn \"${fqbn}\" -p ${FLASHPORT}"
             }
          }
 
