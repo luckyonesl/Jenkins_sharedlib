@@ -9,6 +9,9 @@ for (int i =0; i < pluginDependencies.size(); i++) {
    def GlobalTimeout = 60 // when should a pipeline abort (minutes)
    def ProjectName = null // name of the project (as in branch or tag name)
    def TargetName = null;
+   def FLASHPORT =  '/dev/ttyUSB0'; //should be argument of pipeline or node var
+   //for example PackerArchVersion='arduino:samd@1.6.9'
+   def PackerArchVersion = 'esp8266:esp8266'
 
    // retrieving 'configuration' from closure content (params of this method)
    def config = [:]
@@ -24,6 +27,11 @@ for (int i =0; i < pluginDependencies.size(); i++) {
    if ( null == fqbn || "" == fqbn ) {
       error "Project needs at least a fqbn property with some meaningful value like esp8266:esp8266:d1_mini_pro"
    }
+   PackerArchVersion = config.PackerArchVersion
+   if ( null == PackerArchVersion || "" == PackerArchVersion ) {
+      error "PackerArchVersion should be something like  'arduino:samd@1.6.9'"
+   }
+
    if ( null != config.AgentLables ) {
       echo "Using supplied agentLables '${config.AgentLables}'"
       AgentLabel = "${config.AgentLables}"
@@ -58,7 +66,8 @@ for (int i =0; i < pluginDependencies.size(); i++) {
                echo 'Building..'
                sh label: 'arduino link board', returnStatus: true, script: 'ln -s ~/Arduino'
                sh label: 'arduino link libs', returnStatus: true, script: 'ln -s ~/.arduino15'
-               sh label: 'arduino', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn \"${fqbn}\" ${ProjectName}"
+               sh label: 'arduino build', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli -v compile --build-path ${WORKSPACE}/target/ --fqbn \"${fqbn}\" ${ProjectName}"
+               stash includes: '**/*.bin', name: 'arduino'
 	         }
 	      }
          stage('Flash') {
@@ -66,8 +75,8 @@ for (int i =0; i < pluginDependencies.size(); i++) {
             steps {
                echo 'Flash....'
                unstash 'arduino'
-               sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli core install esp8266:esp8266'
-               sh label: 'arduino', returnStatus: true, script: '/usr/local/arduino-cli/arduino-cli -v upload -i target/az-envy.ino.bin --fqbn "esp8266:esp8266:generall" -p /dev/ttyUSB0'
+               sh label: 'arduino core install', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli core install ${PackerArchVersion}"
+               sh label: 'arduino upload', returnStatus: true, script: "/usr/local/arduino-cli/arduino-cli -v upload -i target/${ProjectName}.ino.bin --fqbn \"${fqbn}\" -p ${FLASHPORT}"
             }
          }
 
