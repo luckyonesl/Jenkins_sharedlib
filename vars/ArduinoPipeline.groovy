@@ -55,10 +55,11 @@ for (int i =0; i < pluginDependencies.size(); i++) {
 	      MYENV = 'undef'
 	   }
       stages {
-         //agent { any }
-	      stage('test') {
+	      stage('lint') {
+            agent { label 'arduinocli' }
 	         steps {
-               echo 'Testing..'
+               sh label: 'arduino', returnStatus: true, script: "/usr/local/arduino-lint/arduino-lint --report-file ${WORKSPACE}/target/result.log ${ProjectName}"
+               archiveArtifacts artifacts: '**/result.log', followSymlinks: false
 	         }
 	      }
 	      stage('build'){
@@ -71,7 +72,7 @@ for (int i =0; i < pluginDependencies.size(); i++) {
                stash includes: '**/*.bin', name: 'arduino'
 	         }
 	      }
-         stage('Flash') {
+         stage('flash') {
             agent { label 'ARM' }
             steps {
                echo 'Flash....'
